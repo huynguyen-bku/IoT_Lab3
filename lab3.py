@@ -23,9 +23,9 @@ def processData(data):
     data = data.replace("!1:", "")
     data = data.replace("#", "")
     splitData = data.split(":")
-    data = {splitData[0]:splitData[1]
-    }
-    client.publish('v1/devices/me/telemetry', json.dumps(data), 1)
+    print(splitData)
+    data_new = {splitData[0]:splitData[1]}
+    client.publish('v1/devices/me/telemetry', json.dumps(data_new), 1)
     
 def readSerial():
     bytesToRead = ser.inWaiting()
@@ -53,10 +53,10 @@ def recv_message(client, userdata, message):
     try:
         jsonobj = json.loads(message.payload)
         if jsonobj['method'] == "setLED":
-            temp_data['value'] = jsonobj['params']
+            temp_data['valueLED'] = jsonobj['params']
             client.publish('v1/devices/me/attributes', json.dumps(temp_data), 1)
         if jsonobj['method'] == "setFAN":
-            temp_data['value'] = jsonobj['params']
+            temp_data['valueFAN'] = jsonobj['params']
             client.publish('v1/devices/me/attributes', json.dumps(temp_data), 1)
     except:
         pass
